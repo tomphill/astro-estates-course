@@ -1,0 +1,13 @@
+---
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+---
+
+<div class="flex items-center gap-5">
+  <div class="text-green-500 text-3xl">
+    <FontAwesomeIcon icon={faCheckCircle} />
+  </div>
+  <div>
+    <slot />
+  </div>
+</div>

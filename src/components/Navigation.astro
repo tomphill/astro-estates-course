@@ -1,0 +1,13 @@
+---
+type Props = {
+  styles: string;
+  classes: string;
+};
+const { styles, classes } = Astro.props;
+---
+
+<nav>
+  <ul class={classes} style={styles}>
+    <slot />
+  </ul>
+</nav>

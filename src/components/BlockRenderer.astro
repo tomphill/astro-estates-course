@@ -1,0 +1,205 @@
+---
+import ContactForm7 from "./ContactForm7.tsx";
+import BlockRendererInner from "./BlockRenderer.astro";
+import Navigation from "./Navigation.astro";
+import Button from "./Button.astro";
+import Heading from "./Heading.astro";
+import Cover from "./Cover.astro";
+import TickItem from "./TickItem.astro";
+import SocialLink from "./SocialLink.astro";
+import PropertySearch from "./PropertySearch.astro";
+import NavigationSubmenu from "./NavigationSubmenu.astro";
+import PropertyDetails from "./PropertyDetails.astro";
+import NavigationLink from "./NavigationLink.astro";
+import { getBlockStyling } from "@wp-block-tools/styles";
+import type { Block } from "@wp-block-tools/styles";
+import { Image } from "astro:assets";
+type Props = {
+  postId: number;
+  blocks: Block[];
+};
+const { blocks, postId } = Astro.props;
+---
+
+{
+  blocks.map((block) => {
+    const { styles, classes } = getBlockStyling(block);
+
+    switch (block.name) {
+      case "contact-form-7/contact-form-selector":
+        return (
+          <ContactForm7
+            client:only="react"
+            formId={block.attributes?.id}
+            formMarkup={block.attributes?.formMarkup}
+          />
+        );
+      case "astroestates/property-search":
+        return <PropertySearch />;
+      case "astroestates/property-details":
+        return (
+          <PropertyDetails
+            bathrooms={block.attributes?.bathrooms}
+            bedrooms={block.attributes?.bedrooms}
+            price={block.attributes?.price}
+            postId={postId}
+          />
+        );
+      case "core/gallery":
+        return (
+          <div style={styles} class={classes}>
+            {(block.innerBlocks || []).map((innerBlock) => (
+              <div>
+                <BlockRendererInner blocks={[innerBlock]} postId={postId} />
+              </div>
+            ))}
+          </div>
+        );
+      case "astroestates/tick-item":
+        return (
+          <TickItem>
+            <BlockRendererInner
+              blocks={block.innerBlocks || []}
+              postId={postId}
+            />
+          </TickItem>
+        );
+      case "core/image":
+        return (
+          <Image
+            src={block.attributes?.url}
+            height={block.attributes?.height}
+            width={block.attributes?.width}
+            class={classes}
+            style={styles}
+            alt=""
+          />
+        );
+      case "core/button":
+        return (
+          <Button
+            classes={classes}
+            styles={styles}
+            url={block.attributes?.url}
+            content={block.attributes?.content || ""}
+          />
+        );
+      case "core/post-title":
+      case "core/heading":
+        return (
+          <Heading
+            transitionName={
+              block.name === "core/post-title" ? `post-title-${postId}` : ""
+            }
+            level={block.attributes?.level || 2}
+            classes={classes}
+            styles={styles}
+            content={block.attributes?.content || ""}
+          />
+        );
+      case "core/cover":
+        return (
+          <Cover
+            classes={classes}
+            styles={styles}
+            url={block.attributes?.url}
+            height={block.attributes?.height}
+            width={block.attributes?.width}
+            dimRatio={block.attributes?.dimRatio}
+            overlayColor={block.attributes?.overlayColor}
+            customOverlayColor={block.attributes?.customOverlayColor}
+            minHeight={block.attributes?.minHeight}
+            minHeightUnit={block.attributes?.minHeightUnit}
+          >
+            <BlockRendererInner
+              blocks={block.innerBlocks || []}
+              postId={postId}
+            />
+          </Cover>
+        );
+      case "core/navigation-submenu":
+        return (
+          <NavigationSubmenu
+            classes={classes}
+            styles={styles}
+            label={block.attributes?.label || ""}
+            url={block.attributes?.url || ""}
+          >
+            <BlockRendererInner
+              blocks={block.innerBlocks || []}
+              postId={postId}
+            />
+          </NavigationSubmenu>
+        );
+      case "core/navigation-link":
+        return (
+          <NavigationLink
+            classes={classes}
+            styles={styles}
+            label={block.attributes?.label || ""}
+            url={block.attributes?.url || ""}
+          />
+        );
+      case "core/navigation":
+        return (
+          <Navigation classes={classes} styles={styles}>
+            <BlockRendererInner
+              blocks={block.innerBlocks || []}
+              postId={postId}
+            />
+          </Navigation>
+        );
+      case "core/paragraph":
+        return (
+          <p
+            class={classes}
+            style={styles}
+            set:html={block.attributes?.content}
+          />
+        );
+      case "core/columns":
+      case "core/column":
+      case "core/post-content":
+      case "core/group":
+      case "core/buttons":
+      case "core/social-links":
+        return (
+          <div class={classes} style={styles}>
+            <BlockRendererInner
+              blocks={block.innerBlocks || []}
+              postId={postId}
+            />
+          </div>
+        );
+      case "core/social-link":
+        return (
+          <SocialLink
+            url={block.attributes?.url}
+            service={block.attributes?.service}
+            classes={classes}
+            styles={styles}
+          />
+        );
+      case "core/site-logo":
+        return (
+          <div class={classes} style={styles}>
+            <Image
+              height={block.attributes?.width || "50"}
+              width={block.attributes?.width || "50"}
+              src={block.attributes?.url || ""}
+              alt="Site logo"
+            />
+          </div>
+        );
+      case "core/template-part":
+        return (
+          <BlockRendererInner
+            blocks={block.innerBlocks || []}
+            postId={postId}
+          />
+        );
+      default:
+        return null;
+    }
+  })
+}

@@ -1,3 +1,53 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    font-family: "Poppins", sans-serif;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: bold;
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+
+  h3 {
+    font-size: 1.17em;
+  }
+
+  h4 {
+    font-size: 1em;
+  }
+
+  h5 {
+    font-size: 0.83em;
+  }
+
+  h6 {
+    font-size: 0.67em;
+  }
+}
+
+.wpcf7-form-control {
+  @apply border border-black p-2 w-full resize-none;
+}
+
+.wpcf7-form {
+  @apply max-w-sm;
+}
+
+.wpcf7-submit {
+  @apply w-full text-white inline-block uppercase font-bold tracking-[1.3px] bg-event-horizon rounded-full py-3 px-6;
+}

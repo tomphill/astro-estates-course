@@ -1,0 +1,152 @@
+---
+import { faBed, faBath } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Image } from "astro:assets";
+import numeral from "numeral";
+const { searchParams } = Astro.url;
+const bedrooms = searchParams.get("bedrooms");
+const bathrooms = searchParams.get("bathrooms");
+const minPrice = searchParams.get("minPrice");
+const maxPrice = searchParams.get("maxPrice");
+const page = searchParams.get("page");
+
+console.log("SEARCH PARAMS: ", searchParams.toString());
+searchParams.delete("page");
+const searchParamsString = searchParams.toString();
+
+const response = await fetch(`${Astro.url.origin}/api/properties.json`);
+const { properties } = await response.json();
+let filteredProperties = properties;
+
+if (bedrooms && !isNaN(parseInt(bedrooms))) {
+  filteredProperties = filteredProperties.filter((property: any) => {
+    return property.propertyDetails.bedrooms >= parseInt(bedrooms);
+  });
+}
+
+if (bathrooms && !isNaN(parseInt(bathrooms))) {
+  filteredProperties = filteredProperties.filter((property: any) => {
+    return property.propertyDetails.bathrooms >= parseInt(bathrooms);
+  });
+}
+
+if (minPrice && !isNaN(parseInt(minPrice))) {
+  filteredProperties = filteredProperties.filter((property: any) => {
+    return property.propertyDetails.price >= parseInt(minPrice);
+  });
+}
+
+if (maxPrice && !isNaN(parseInt(maxPrice))) {
+  filteredProperties = filteredProperties.filter((property: any) => {
+    return property.propertyDetails.price <= parseInt(maxPrice);
+  });
+}
+const pageSize = 3;
+const totalPages = Math.ceil(filteredProperties.length / pageSize);
+const pageNumber = page ? (isNaN(parseInt(page)) ? 1 : parseInt(page)) : 1;
+const offset = (pageNumber - 1) * pageSize;
+filteredProperties = filteredProperties.slice(offset, offset + pageSize);
+---
+
+<form method="GET">
+  <fieldset class="pb-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
+    <div>
+      <label><strong>Min bedrooms</strong></label>
+      <input
+        value={bedrooms}
+        type="number"
+        name="bedrooms"
+        class="w-full py-1 px-2 border border-event-horizon rounded-sm"
+      />
+    </div>
+    <div>
+      <label><strong>Min bathrooms</strong></label>
+      <input
+        value={bathrooms}
+        type="number"
+        name="bathrooms"
+        class="w-full py-1 px-2 border border-event-horizon rounded-sm"
+      />
+    </div>
+    <div>
+      <label><strong>Min price</strong></label>
+      <input
+        value={minPrice}
+        type="number"
+        name="minPrice"
+        class="w-full py-1 px-2 border border-event-horizon rounded-sm"
+      />
+    </div>
+    <div>
+      <label><strong>Max price</strong></label>
+      <input
+        value={maxPrice}
+        type="number"
+        name="maxPrice"
+        class="w-full py-1 px-2 border border-event-horizon rounded-sm"
+      />
+    </div>
+  </fieldset>
+  <button
+    type="submit"
+    class="w-full text-white inline-block uppercase font-bold tracking-[1.3px] bg-event-horizon rounded-full py-3 px-6"
+  >
+    Search
+  </button>
+</form>
+<div class="grid gap-2 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+  {
+    filteredProperties.map((property: any) => (
+      <a
+        href={property.uri}
+        class="p-2 border border-zinc-200 hover:bg-zinc-100"
+      >
+        {!!property.featuredImage && (
+          <Image
+            height={property.featuredImage.node.mediaDetails.height}
+            width={property.featuredImage.node.mediaDetails.width}
+            src={property.featuredImage.node.sourceUrl}
+            alt=""
+            class="h-40 w-full object-cover"
+          />
+        )}
+        <p class="pt-2" transition:name={`post-title-${property.databaseId}`}>
+          <strong>{property.title}</strong>
+        </p>
+        <p class="text-3xl" transition:name={`price-${property.databaseId}`}>
+          £{numeral(property.propertyDetails.price).format("0,0")}
+        </p>
+        <div class="flex gap-8">
+          <div transition:name={`beds-${property.databaseId}`}>
+            <FontAwesomeIcon icon={faBed} className="pr-2" />
+            {property.propertyDetails.bedrooms}
+          </div>
+          <div transition:name={`baths-${property.databaseId}`}>
+            <FontAwesomeIcon icon={faBath} className="pr-2" />
+            {property.propertyDetails.bathrooms}
+          </div>
+        </div>
+      </a>
+    ))
+  }
+</div>
+<div class="flex gap-2 justify-center">
+  {
+    Array.from({ length: totalPages }).map((_, i) => (
+      <a
+        class={`block px-3 py-2 rounded-md ${
+          i + 1 === pageNumber
+            ? `bg-event-horizon text-white`
+            : `bg-zinc-200 hover:bg-zinc-300`
+        }`}
+        href={`?${
+          searchParamsString
+            ? `${searchParamsString}&page=${i + 1}`
+            : `page=${i + 1}`
+        }`}
+      >
+        {i + 1}
+      </a>
+    ))
+  }
+</div>

@@ -1,0 +1,28 @@
+---
+import type { HTMLTag } from "astro/types";
+type Props = {
+  classes: string;
+  styles: string;
+  level: 1 | 2 | 3 | 4 | 5 | 6;
+  content: string;
+  transitionName: string;
+};
+const { level, styles, classes, content, transitionName } = Astro.props;
+const Element: HTMLTag = `h${level}`;
+---
+
+{
+  !!transitionName && (
+    <Element
+      transition:name={transitionName}
+      set:html={content}
+      style={styles}
+      class={classes}
+    />
+  )
+}
+{
+  !transitionName && (
+    <Element set:html={content} style={styles} class={classes} />
+  )
+}

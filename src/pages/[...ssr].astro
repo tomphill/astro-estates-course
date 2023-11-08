@@ -1,0 +1,23 @@
+---
+import BlockRenderer from "../components/BlockRenderer.astro";
+import CommonHead from "../components/CommonHead.astro";
+export const prerender = false;
+
+const { ssr } = Astro.params;
+
+const response = await fetch(
+  `${Astro.url.origin}/api/page-data${ssr ? `/${ssr}` : ""}.json`,
+);
+const { data } = await response.json();
+if (!data) {
+  return Astro.redirect("/404");
+}
+const { seo, blocks, databaseId } = data;
+---
+
+<html lang="en">
+  <CommonHead title={seo.title || ""} description={seo.metaDesc || ""} />
+  <body>
+    <BlockRenderer blocks={blocks} postId={databaseId} />
+  </body>
+</html>

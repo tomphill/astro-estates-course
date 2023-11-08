@@ -1,0 +1,17 @@
+---
+import { replaceUrls } from "../utils/replaceUrls";
+type Props = {
+  classes: string;
+  styles: string;
+  label: string;
+  url: string;
+};
+const { classes, styles, label, url } = Astro.props;
+const href = replaceUrls(url, Astro.url.host);
+---
+
+<li class={classes} style={styles}>
+  <a href={href}>
+    {label}
+  </a>
+</li>

@@ -1,0 +1,40 @@
+---
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFacebook,
+  faInstagram,
+  faYoutube,
+} from "@fortawesome/free-brands-svg-icons";
+type Props = {
+  classes: string;
+  styles: string;
+  service: string;
+  url: string;
+};
+
+const { classes, styles, service, url } = Astro.props;
+---
+
+<div class={classes} style={styles}>
+  {
+    service === "facebook" && (
+      <a href={url} class="text-3xl hover:text-blue-500">
+        <FontAwesomeIcon icon={faFacebook} />
+      </a>
+    )
+  }
+  {
+    service === "instagram" && (
+      <a href={url} class="text-3xl hover:text-pink-500">
+        <FontAwesomeIcon icon={faInstagram} />
+      </a>
+    )
+  }
+  {
+    service === "youtube" && (
+      <a href={url} class="text-3xl hover:text-red-500">
+        <FontAwesomeIcon icon={faYoutube} />
+      </a>
+    )
+  }
+</div>
