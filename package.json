@@ -20,7 +20,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@types/react": "^18.2.33",
     "@types/react-dom": "^18.2.14",
-    "@wp-block-tools/styles": "^1.1.4",
+    "@wp-block-tools/styles": "^1.1.8",
     "astro": "^3.3.2",
     "numeral": "^2.0.6",
     "react": "^18.2.0",
