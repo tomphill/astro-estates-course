@@ -15,12 +15,12 @@ const href = replaceUrls(url, Astro.url.host);
 ---
 
 <li class={allClasses} style={styles}>
-  <a href={href}>
+  <a href={href} class="block px-6 sm:px-0 py-3 sm:py-0">
     {label}
     <FontAwesomeIcon className="text-xs pl-1" icon={faChevronDown} />
   </a>
   <ul
-    class="z-20 hidden group-hover:block absolute top-full right-0 text-right whitespace-nowrap bg-event-horizon py-2 [&_a]:px-4 [&_a]:py-2 [&_a]:block"
+    class="pl-4 z-20 sm:hidden sm:group-hover:block sm:absolute sm:top-full sm:right-0 sm:text-right whitespace-nowrap bg-event-horizon py-2 [&_a]:px-4 [&_a]:py-2 [&_a]:block"
   >
     <slot />
   </ul>
