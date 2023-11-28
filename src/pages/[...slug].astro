@@ -15,13 +15,13 @@ export async function getStaticPaths() {
 				pages(first: 10000){
 					nodes {
 						uri
-            blocks
+            blocks(attributes:false)
 					}
 				}
         properties(first: 10000) {
           nodes {
             uri
-            blocks
+            blocks(attributes:false)
           }
         }
 			}
