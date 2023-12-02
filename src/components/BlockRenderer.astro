@@ -188,6 +188,9 @@ const { blocks, postId } = Astro.props;
               width={block.attributes?.width || "50"}
               src={block.attributes?.url || ""}
               alt="Site logo"
+              quality="mid"
+              format="webp"
+              widths={[50, 75, 100]}
             />
           </div>
         );
