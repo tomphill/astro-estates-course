@@ -18,21 +18,21 @@ const { classes, styles, service, url } = Astro.props;
 <div class={classes} style={styles}>
   {
     service === "facebook" && (
-      <a href={url} class="text-3xl hover:text-blue-500">
+      <a href={url} class="text-3xl hover:text-blue-500" aria-label="Facebook">
         <FontAwesomeIcon icon={faFacebook} />
       </a>
     )
   }
   {
     service === "instagram" && (
-      <a href={url} class="text-3xl hover:text-pink-500">
+      <a href={url} class="text-3xl hover:text-pink-500" aria-label="Instagram">
         <FontAwesomeIcon icon={faInstagram} />
       </a>
     )
   }
   {
     service === "youtube" && (
-      <a href={url} class="text-3xl hover:text-red-500">
+      <a href={url} class="text-3xl hover:text-red-500" aria-label="YouTube">
         <FontAwesomeIcon icon={faYoutube} />
       </a>
     )
