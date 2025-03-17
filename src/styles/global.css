@@ -1,6 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@source "../../node_modules/@wp-block-tools/styles";
+
+@theme {
+  --color-event-horizon: var(--color--event-horizon);
+  --color-bast-off: var(--color--blast-off);
+}
 
 @layer base {
   body {

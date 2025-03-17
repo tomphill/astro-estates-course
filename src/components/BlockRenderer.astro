@@ -64,7 +64,7 @@ const { blocks, postId } = Astro.props;
             />
           </TickItem>
         );
-      case "core/image":
+      case "core/image": {
         return (
           <Image
             src={block.attributes?.url}
@@ -75,6 +75,7 @@ const { blocks, postId } = Astro.props;
             alt=""
           />
         );
+      }
       case "core/button":
         return (
           <Button
